@@ -439,6 +439,7 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 }
 
 carta_j* Comprar_Carta(char *baralho, int indice_jogador, carta_j *cartas, int n_cartas){
+	printf("%d\n", n_cartas);
 	if(n_cartas == 0){
 		cartas = (carta_j *) malloc(sizeof(carta_j));
 		if(!cartas){
@@ -591,7 +592,7 @@ int Ler_Baralho(FILE *f_read, char *baralho){
 	return 0;
 }
 
-void Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *cartas, int *n_grupos, int *n_seq, int *n_cartas, char *baralho){
+carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *cartas, int *n_grupos, int *n_seq, int *n_cartas, char *baralho){
 	int vazio = 0;
 	contador c1;
 	opc opc_jogo;
@@ -749,6 +750,8 @@ void Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *carta
 			break;
 		}
 	}
+
+	return cartas;
 }
 
 
@@ -852,7 +855,7 @@ int main(){
 			printf("\n");
 		}
 		printf("\n");
-		Rodada(n_jogadores, n_rodadas, &carta_mao_usada, cartas, &n_grupos, &n_seq, &n_cartas, baralho);
+		cartas = Rodada(n_jogadores, n_rodadas, &carta_mao_usada, cartas, &n_grupos, &n_seq, &n_cartas, baralho);
 		n_rodadas++;
 	}
 
