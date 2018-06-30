@@ -21,7 +21,88 @@
 
 /* Declaração de funções */
 
-void Mover_Cartas(carta_j *cartas, int n_cartas, int indice_jogador, int n_seq, int n_grupos, int rodada1){
+void Mover_em_grupo(carta_j *cartas, int indice_carta, int n_grupos, int n_cartas){
+	opc opc_mov;
+	printf("Em qual grupo deseja colocar a carta?\n");
+	opc_mov = getc(stdin);
+	fflush(stdin);
+	int ind_grupo;
+	ind_grupo = (int) opc_mov - 48;
+	while((ind_grupo > n_grupos) || (ind_grupo <= 0)){
+		printf("Entrada invalida.\n");
+		printf("Em qual grupo deseja colocar a carta?\n");
+		opc_mov = getc(stdin);
+		fflush(stdin);
+		ind_grupo = (int) opc_mov - 48;
+	}
+	cartas[indice_carta].indice_grupo = ind_grupo;
+	cartas[indice_carta].indice_mao = -1;
+	printf("Carta adicionada com sucesso!\n\n");
+}
+
+void Mover_em_seq(carta_j *cartas, int indice_carta, int n_seq, int n_cartas){
+	opc opc_mov;
+	printf("Em qual sequencia deseja colocar a carta?\n");
+	opc_mov = getc(stdin);
+	fflush(stdin);
+	int ind_seq;
+	ind_seq = (int) opc_mov - 48;
+	while((ind_seq > n_seq) || (ind_seq <= 0)){
+		printf("Entrada invalida.\n");
+		printf("Em qual sequencia deseja colocar a carta?\n");
+		opc_mov = getc(stdin);
+		fflush(stdin);
+		ind_seq = (int) opc_mov - 48;
+	}
+	int max_pos = 0;
+	contador c1;
+	for (c1 = 0; c1 < n_cartas; c1++){
+		if(cartas[c1].indice_seq == ind_seq){
+			max_pos++;
+		}
+	}
+	if (!max_pos){
+		cartas[indice_carta].indice_seq = ind_seq;
+		cartas[indice_carta].pos_seq = 1;
+		cartas[indice_carta].indice_mao = -1;
+		printf("Carta adicionada com sucesso!\n\n");
+	} else {
+		printf("Em qual posição deseja adicionar a carta?\n");
+		opc_mov = getc(stdin);
+		if((opc_mov > (max_pos + 49)) || (opc_mov < '1')){ // max_pos + 49 = max_pos + '1'
+			printf("Posicao invalida! Leve em consideracao quantas cartas ja estao na sequencia.\n");
+			printf("Em qual posição deseja adicionar a carta?\n");
+			opc_mov = getc(stdin);
+		} else {
+			for(c1 = 0; c1 < n_cartas; c1++){
+				if(cartas[c1].indice_seq == ind_seq){
+					if(cartas[c1].pos_seq >= (opc_mov - 48)){
+						cartas[c1].pos_seq++;
+					}
+				}
+			}
+			cartas[indice_carta].indice_seq = ind_seq;
+			cartas[indice_carta].pos_seq = (opc_mov - 48);
+			cartas[indice_carta].indice_mao = -1;
+			printf("Carta adicionada com sucesso!\n\n");
+		}
+	}
+}
+
+void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_seq, int n_grupos){
+	carta_j *cartas;
+	cartas = (carta_j *) malloc(n_cartas * sizeof(carta_j));
+	if(!cartas){
+		printf("Erro na alocacao dinamica de memoria!\n");
+		getc(stdin);
+		exit(1);
+	}
+
+	contador c;
+	for(c = 0; c < n_cartas; c++){
+		cartas[c] = cartas_orig[c];
+	}
+
 	while(1){
 		printf("A carta que deseja mover esta em:\n	1- Sua mao.\n	2- Uma sequencia.\n	3- Um grupo.\n");
 		opc opc_mov;
@@ -38,12 +119,13 @@ void Mover_Cartas(carta_j *cartas, int n_cartas, int indice_jogador, int n_seq, 
 			opc_mov = getc(stdin);
 			fflush(stdin);
 		}
+		contador c1;
+
 		switch(opc_mov){
 		case '1':
 			printf("Digite o conteudo da carta (numero e naipe):\n");
 			fgets(carta_cmp, 3, stdin);
 			fflush(stdin);
-			contador c1;
 			for(c1 = 0; c1 < n_cartas; c1++){
 				if(cartas[c1].indice_mao == indice_jogador){
 					if(cartas[c1].conteudo[0] == carta_cmp[0]){
@@ -69,53 +151,109 @@ void Mover_Cartas(carta_j *cartas, int n_cartas, int indice_jogador, int n_seq, 
 				fflush(stdin);
 			}
 			if(opc_mov == 1){
-				printf("Em qual sequencia deseja colocar a carta?\n");
-				opc_mov = getc(stdin);
-				fflush(stdin);
-				int ind_seq;
-				ind_seq = (int) opc_mov - 48;
-				while((ind_seq > n_seq) || (ind_seq == 0)){
-					printf("Entrada invalida.\n");
-					printf("Em qual sequencia deseja colocar a carta?\n");
-					opc_mov = getc(stdin);
-					fflush(stdin);
-					ind_seq = (int) opc_mov - 48;
+				Mover_em_seq(cartas, indice_carta, n_seq, n_cartas);
+			} else {
+				Mover_em_grupo(cartas, indice_carta, n_grupos, n_cartas);
+			}
+			break;
+		case '2':;
+			int add_seq;
+			int pos_add_seq;
+			printf("Insira a sequencia aonde a carta esta no momento:\n");
+			add_seq = getc(stdin) - 48;
+			while((add_seq > n_seq) || (add_seq <= 0)){
+				printf("Entrada invalida!\n");
+				printf("Insira a sequencia aonde a carta esta no momento:\n");
+				add_seq = getc(stdin) - 48;
+			}
+			printf("Insira a posicao na sequencia que a carta ocupa no momento:\n");
+			pos_add_seq = getc(stdin) - 48;
+			int max_pos = 0;
+			for (c1 = 0; c1 < n_cartas; c1++){
+				if(cartas[c1].indice_seq == add_seq){
+					max_pos++;
 				}
-				int max_pos = 0;
-				for (c1 = 0; c1 < n_cartas; c1++){
-					if(cartas[c1].indice_seq == ind_seq){
-						max_pos++;
-					}
-				}
-				if (!max_pos){
-					cartas[indice_carta].indice_seq = ind_seq;
-					cartas[indice_carta].pos_seq = 1;
-					printf("Carta adicionada com sucesso!\n\n");
-					break;
-				} else {
-					printf("Em qual posição deseja adicionar a carta?\n");
-					opc_mov = getc(stdin);
-					if((opc_mov > (max_pos + 49)) || (opc_mov < '1')){ // max_pos + 49 = max_pos + '1'
-						printf("Posicao invalida! Leve em consideracao quantas cartas ja estao na sequencia.\n");
-						printf("Em qual posição deseja adicionar a carta?\n");
-						opc_mov = getc(stdin);
-					} else {
-						for(c1 = 0; c1 < n_cartas; c1++){
-							if(cartas[c1].indice_seq == ind_seq){
-								if(cartas[c1].pos_seq >= (opc_mov - 48)){
-									cartas[c1].pos_seq++;
-								}
-							}
-						}
-						cartas[indice_carta].indice_seq = ind_seq;
-						cartas[indice_carta].pos_seq = (opc_mov - 48);
-						printf("Carta adicionada com sucesso!\n\n");
+			}
+			while((pos_add_seq > max_pos) || (pos_add_seq <= 0)){
+				printf("Entrada invalida!\n");
+				printf("Insira a posicao na sequencia que a carta ocupa no momento:\n");
+				pos_add_seq = getc(stdin) - 48;
+			}
+			for(c1 = 0; c1 < n_cartas; c1++){
+				if(cartas[c1].indice_seq == add_seq){
+					if(cartas[c1].pos_seq == pos_add_seq){
+						carta_existe = 1;
+						indice_carta = c1;
 						break;
 					}
 				}
 			}
+			if (!carta_existe){
+				printf("A carta nao foi encontrada!\n");
+				break;
+			}
+			printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+			opc_mov = getc(stdin);
+			fflush(stdin);
+			while((opc_mov != 1) && (opc_mov != 2)){
+				printf("Opcao invalida!\n");
+				printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+				opc_mov = getc(stdin);
+				fflush(stdin);
+			}
+			if(opc_mov == 1){
+				Mover_em_seq(cartas, indice_carta, n_seq, n_cartas);
+			} else {
+				Mover_em_grupo(cartas, indice_carta, n_grupos, n_cartas);
+			}
+			break;
+		case '3':;
+			int add_grupo;
+			printf("Insira o grupo aonde a carta esta no momento:\n");
+			add_grupo = getc(stdin) - 48;
+			while((add_grupo > n_grupos) || (add_grupo <= 0)){
+				printf("Entrada invalida!\n");
+				printf("Insira o grupo aonde a carta esta no momento:\n");
+				add_grupo = getc(stdin) - 48;
+			}
+			printf("Digite o conteudo da carta (numero e naipe):\n");
+			fgets(carta_cmp, 3, stdin);
+			fflush(stdin);
+			contador c1;
+			for(c1 = 0; c1 < n_cartas; c1++){
+				if(cartas[c1].indice_grupo == add_grupo){
+					if(cartas[c1].conteudo[0] == carta_cmp[0]){
+						if (cartas[c1].conteudo[1] == carta_cmp[1]){
+							carta_existe = 1;
+							indice_carta = c1;
+							break;
+						}
+					}
+				}
+			}
+			if (!carta_existe){
+				printf("A carta nao foi encontrada!\n");
+				break;
+			}
+			printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+			opc_mov = getc(stdin);
+			fflush(stdin);
+			while((opc_mov != 1) && (opc_mov != 2)){
+				printf("Opcao invalida!\n");
+				printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+				opc_mov = getc(stdin);
+				fflush(stdin);
+			}
+			if(opc_mov == 1){
+				Mover_em_seq(cartas, indice_carta, n_seq, n_cartas);
+			} else {
+				Mover_em_grupo(cartas, indice_carta, n_grupos, n_cartas);
+			}
+			break;
+			default:;
 		}
 	}
+	free(cartas);
 }
 
 carta_j* Comprar_Carta(char *baralho, int indice_jogador, carta_j *cartas, int n_cartas){
@@ -298,8 +436,6 @@ int main(){
 
 	int invalido = 1;
 	int vitoria = 0;
-	int rodada1_1, rodada1_2, rodada1_3, rodada1_4, rodada1_5;
-	rodada1_5 = rodada1_4 = rodada1_3 = rodada1_2 = rodada1_1 = 1;
 
 	/*  */
 	
