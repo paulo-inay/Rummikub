@@ -21,7 +21,7 @@
 
 /* Declaração de funções */
 
-carta_j* Mover_Cartas(carta_j *cartas, int n_cartas, int indice_jogador, int n_seq, int n_grupos, int rodada1){
+void Mover_Cartas(carta_j *cartas, int n_cartas, int indice_jogador, int n_seq, int n_grupos, int rodada1){
 	while(1){
 		printf("A carta que deseja mover esta em:\n	1- Sua mao.\n	2- Uma sequencia.\n	3- Um grupo.\n");
 		char carta_cmp[3];
@@ -73,8 +73,38 @@ carta_j* Mover_Cartas(carta_j *cartas, int n_cartas, int indice_jogador, int n_s
 									if((ind_seq > n_seq) || (ind_seq == 0)){
 										printf("Entrada invalida.\n");
 									} else {
+										int max_pos = 0;
 										for (c1 = 0; c1 < n_cartas; c1++){
-
+											if(cartas[c1].indice_seq == ind_seq){
+												max_pos++;
+											}
+										}
+										if (!max_pos){
+											cartas[indice_carta].indice_seq = ind_seq;
+											cartas[indice_carta].pos_seq = 1;
+											printf("Carta adicionada com sucesso!\n\n");
+											break;
+										} else {
+											while(1){
+												printf("Em qual posição deseja adicionar a carta?\n");
+												opc_mov = getc(stdin);
+												if((opc_mov > (max_pos + 49)) || (opc_mov < '1')){ // max_pos + 49 = max_pos + '1'
+													printf("Posicao invalida! Leve em consideracao quantas cartas ja estao na sequencia.\n");
+												} else {
+													for(c1 = 0; c1 < n_cartas; c1++){
+														if(cartas[c1].indice_seq == ind_seq){
+															if(cartas[c1].pos_seq >= (opc_mov - 48)){
+																cartas[c1].pos_seq++;
+															}
+														}
+													}
+													cartas[indice_carta].indice_seq = ind_seq;
+													cartas[indice_carta].pos_seq = (opc_mov - 48);
+													printf("Carta adicionada com sucesso!\n\n");
+													break;
+												}
+											}
+											break;
 										}
 									}
 								}
@@ -356,7 +386,7 @@ int main(){
 			printf("E sua vez Jogador %d! ", (n_rodadas % n_jogadores) + 1);
 			invalido = 1;
 			while (invalido){
-				printf("Escolha uma das opcoes a seguir:\n	1- Adicionar grupo.\n	2- Adicionar sequencia.\n	3- Mover ou adicionar cartas no tabuleiro.\n	4- Remover ultima sequencia ou grupo (obs: ele(a) devem estar vazios).\n	5- Comprar uma carta e passar a vez.\n");
+				printf("Escolha uma das opcoes a seguir:\n	1- Adicionar grupo.\n	2- Adicionar sequencia.\n	3- Mover ou adicionar cartas no tabuleiro.\n	4- Remover ultima sequencia ou grupo (obs: ele(a) deve estar vazio(a)).\n	5- Comprar uma carta e passar a vez.\n");
 				opc_jogo = getc(stdin);
 				fflush(stdin);
 				switch(opc_jogo){
@@ -437,5 +467,7 @@ int main(){
 	}
 
 	getc(stdin);
+
+
 
 }
