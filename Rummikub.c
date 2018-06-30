@@ -152,6 +152,8 @@ void Mover_em_grupo(carta_j *cartas, int indice_carta, int n_grupos, int n_carta
 		ind_grupo = (int) opc_mov - 48;
 	}
 	cartas[indice_carta].indice_grupo = ind_grupo;
+	cartas[indice_carta].indice_seq = 0;
+	cartas[indice_carta].pos_seq = 0;
 	cartas[indice_carta].indice_mao = -1;
 	printf("Carta adicionada com sucesso!\n\n");
 }
@@ -181,6 +183,7 @@ void Mover_em_seq(carta_j *cartas, int indice_carta, int n_seq, int n_cartas){
 		cartas[indice_carta].indice_seq = ind_seq;
 		cartas[indice_carta].pos_seq = 1;
 		cartas[indice_carta].indice_mao = -1;
+		cartas[indice_carta].indice_grupo = 0;
 		printf("Carta adicionada com sucesso!\n\n");
 	} else {
 		printf("Em qual posição deseja adicionar a carta?\n");
@@ -200,6 +203,7 @@ void Mover_em_seq(carta_j *cartas, int indice_carta, int n_seq, int n_cartas){
 			cartas[indice_carta].indice_seq = ind_seq;
 			cartas[indice_carta].pos_seq = (opc_mov - 48);
 			cartas[indice_carta].indice_mao = -1;
+			cartas[indice_carta].indice_grupo = 0;
 			printf("Carta adicionada com sucesso!\n\n");
 		}
 	}
@@ -587,6 +591,167 @@ int Ler_Baralho(FILE *f_read, char *baralho){
 	return 0;
 }
 
+void Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *cartas, int *n_grupos, int *n_seq, int *n_cartas, char *baralho){
+	int vazio = 0;
+	contador c1;
+	opc opc_jogo;
+	carta_mao_usada = 0;
+	printf("E sua vez Jogador %d! ", (n_rodadas % n_jogadores) + 1);
+	int invalido = 1;
+	while (invalido){
+		printf("Escolha uma das opcoes a seguir:\n	1- Adicionar grupo.\n	2- Adicionar sequencia.\n	3- Mover ou adicionar cartas no tabuleiro.\n	4- Remover ultima sequencia ou grupo (obs: ele(a) deve estar vazio(a)).\n	5- Comprar uma carta e passar a vez.\n	6- Terminar seu turno (obs: uma carta de sua mao deve ser colocada no tabuleiro)\n");
+		opc_jogo = getc(stdin);
+		fflush(stdin);
+		switch(opc_jogo){
+		case '1':
+			(*n_grupos)++;
+			printf("\n");
+			break;
+		case '2':
+			(*n_seq)++;
+			printf("\n");
+			break;
+		case '3':
+			Mover_Cartas(cartas, *n_cartas, n_rodadas % n_jogadores, *n_seq, *n_grupos, &(*carta_mao_usada));
+			break;
+		case '4':
+			printf("Remover:\n	1- Sequencia.\n	2- Grupo.\n");
+			opc_jogo = getc(stdin);
+			fflush(stdin);
+			while((opc_jogo > '2') || (opc_jogo < '1')){
+				printf("Valor invalido!\n\n");
+				printf("Remover:\n	1- Sequencia.\n	2- Grupo.\n");
+				opc_jogo = getc(stdin);
+				fflush(stdin);
+			}
+			if(opc_jogo == '1'){
+				if(!(*n_seq)){
+					printf("Nao ha sequencias no tabuleiro.\n\n");
+					break;
+				}
+				int flag1 = 0;
+				for(c1 = 0; c1 < *n_cartas; c1++){
+					if(cartas[c1].indice_seq == *n_seq){
+						flag1 = 1;
+					}
+				}
+				if(flag1){
+					printf("Ainda ha cartas nessa sequencia! Remova elas antes de deleta-la.\n\n");
+					break;
+				} else {
+					(*n_seq)--;
+					printf("Sequencia removida.\n\n");
+					break;
+				}
+			}
+			if(opc_jogo == '2'){
+				if(!(*n_grupos)){
+					printf("Nao ha grupos no tabuleiro.\n\n");
+					break;
+				}
+				int flag1 = 0;
+				for(c1 = 0; c1 < *n_cartas; c1++){
+					if(cartas[c1].indice_grupo == *n_grupos){
+						flag1 = 1;
+					}
+				}
+				if(flag1){
+					printf("Ainda ha cartas nesse grupo! Remova elas antes de deleta-lo.\n\n");
+					break;
+				} else {
+					(*n_grupos)--;
+					printf("Grupo removido.\n\n");
+					break;
+				}
+			}
+			break;
+		case '5':
+			if(carta_mao_usada){
+				printf("Voce utilizou uma carta de sua mao, termine o turno normalmente em vez de comprar uma carta.\n\n");
+				break;
+			}
+			vazio = 1;
+			for(c1 = 1; c1 <= *n_seq; c1++){
+				vazio = 0;
+				contador c2;
+				for (c2 = 0; c2 < *n_cartas; c2++){
+					if(cartas[c2].indice_seq == c1){
+						vazio = 1;
+					}
+				}
+				if(!vazio){
+					printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+					break;
+				}
+			}
+			if(!vazio){
+				break;
+			}
+			for (c1 = 1; c1 <= *n_grupos; c1++){
+				vazio = 0;
+				contador c2;
+				for (c2 = 0; c2 < *n_cartas; c2++){
+					if(cartas[c2].indice_grupo == c1){
+						vazio = 1;
+					}
+				}
+				if(!vazio){
+					printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+					break;
+				}
+			}
+			if(!vazio){
+				break;
+			}
+			printf("a");
+			cartas = Comprar_Carta(baralho, n_rodadas % n_jogadores, cartas, *n_cartas);
+			(*n_cartas)++;
+			invalido = 0;
+			break;
+		case '6':
+			for(c1 = 1; c1 <= *n_seq; c1++){
+				vazio = 0;
+				contador c2;
+				for (c2 = 0; c2 < *n_cartas; c2++){
+					if(cartas[c2].indice_seq == c1){
+						vazio = 1;
+					}
+				}
+				if(!vazio){
+					printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+					break;
+				}
+			}
+			if(!vazio){
+				break;
+			}
+			for (c1 = 1; c1 <= *n_grupos; c1++){
+				vazio = 0;
+				contador c2;
+				for (c2 = 0; c2 < *n_cartas; c2++){
+					if(cartas[c2].indice_grupo == c1){
+						vazio = 1;
+					}
+				}
+				if(!vazio){
+					printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+					break;
+				}
+			}
+			if(!vazio){
+				break;
+			}
+			if(!(*carta_mao_usada)){
+				printf("Nao e possivel terminar seu turno sem colocar pelo menos uma carta de sua mao no tabuleiro.\nColoque uma carta no tabuleiro ou compre uma carta.\n\n");
+				break;
+			}
+			invalido = 0;
+			break;
+		}
+	}
+}
+
+
 /* */
 
 int main(){
@@ -655,19 +820,19 @@ int main(){
 
 	while((!vitoria) && (n_cartas != 106)){
 		printf("\n");
-		for(c1 = 0; c1 < n_jogadores; c1++){
-			printf("Cartas do jogador %d:", c1 + 1);
+		for(c1 = 1; c1 <= n_jogadores; c1++){
+			printf("Cartas do jogador %d:", c1);
 			contador c2;
 			for (c2 = 0; c2 <= n_cartas; c2++){
-				if(cartas[c2].indice_mao == c1){
+				if(cartas[c2].indice_mao == c1 - 1){
 					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
 				}
 			}
 			printf("\n");
 		}
 		printf("\nTabuleiro:\n");
-		for(c1 = 0; c1 < n_grupos; c1++){
-			printf("	Grupo %d:", c1 + 1);
+		for(c1 = 1; c1 <= n_grupos; c1++){
+			printf("	Grupo %d:", c1);
 			contador c2;
 			for (c2 = 0; c2 <= n_cartas; c2++){
 				if(cartas[c2].indice_grupo == (c1 + 1)){
@@ -676,8 +841,8 @@ int main(){
 			}
 			printf("\n");
 		}
-		for(c1 = 0; c1 < n_seq; c1++){
-			printf("	Sequencia %d:", c1 + 1);
+		for(c1 = 1; c1 <= n_seq; c1++){
+			printf("	Sequencia %d:", c1);
 			contador c2;
 			for (c2 = 0; c2 <= n_cartas; c2++){
 				if(cartas[c2].indice_seq == (c1 + 1)){
@@ -687,168 +852,8 @@ int main(){
 			printf("\n");
 		}
 		printf("\n");
-		switch(n_rodadas % n_jogadores){ //n_rodadas % n_jogadores = operação para decidir de qual jogador é a rodada atual.
-		case 0:
-			carta_mao_usada = 0;
-			printf("E sua vez Jogador %d! ", (n_rodadas % n_jogadores) + 1);
-			invalido = 1;
-			while (invalido){
-				printf("Escolha uma das opcoes a seguir:\n	1- Adicionar grupo.\n	2- Adicionar sequencia.\n	3- Mover ou adicionar cartas no tabuleiro.\n	4- Remover ultima sequencia ou grupo (obs: ele(a) deve estar vazio(a)).\n	5- Comprar uma carta e passar a vez.\n	6- Terminar seu turno (obs: uma carta de sua mao deve ser colocada no tabuleiro)\n");
-				opc_jogo = getc(stdin);
-				fflush(stdin);
-				switch(opc_jogo){
-				case '1':
-					n_grupos++;
-					printf("\n");
-					break;
-				case '2':
-					n_seq++;
-					printf("\n");
-					break;
-				case '3':
-					Mover_Cartas(cartas, n_cartas, 0, n_seq, n_grupos, &carta_mao_usada);
-					break;
-				case '4':
-					printf("Remover:\n	1- Sequencia.\n	2- Grupo.\n");
-					opc_jogo = getc(stdin);
-					fflush(stdin);
-					while((opc_jogo > '2') || (opc_jogo < '1')){
-						printf("Valor invalido!\n\n");
-						printf("Remover:\n	1- Sequencia.\n	2- Grupo.\n");
-						opc_jogo = getc(stdin);
-						fflush(stdin);
-					}
-					if(opc_jogo == '1'){
-						if(!n_seq){
-							printf("Nao ha sequencias no tabuleiro.\n\n");
-							break;
-						}
-						int flag1 = 0;
-						for(c1 = 0; c1 < n_cartas; c1++){
-							if(cartas[c1].indice_seq == n_seq){
-								flag1 = 1;
-							}
-						}
-						if(flag1){
-							printf("Ainda ha cartas nessa sequencia! Remova elas antes de deleta-la.\n\n");
-							break;
-						} else {
-							n_seq--;
-							printf("Sequencia removida.\n\n");
-							break;
-						}
-					}
-					if(opc_jogo == '2'){
-						if(!n_grupos){
-							printf("Nao ha grupos no tabuleiro.\n\n");
-							break;
-						}
-						int flag1 = 0;
-						for(c1 = 0; c1 < n_cartas; c1++){
-							if(cartas[c1].indice_grupo == n_grupos){
-								flag1 = 1;
-							}
-						}
-						if(flag1){
-							printf("Ainda ha cartas nesse grupo! Remova elas antes de deleta-lo.\n\n");
-							break;
-						} else {
-							n_grupos--;
-							printf("Grupo removido.\n\n");
-							break;
-						}
-					}
-					break;
-				case '5':
-					if(carta_mao_usada){
-						printf("Voce utilizou uma carta de sua mao, termine o turno normalmente em vez de comprar uma carta.\n\n");
-						break;
-					}
-					if((!n_seq) && (!n_grupos)){
-						vazio = 1;
-					}
-					for(c1 = 1; c1 <= n_seq; c1++){
-						vazio = 0;
-						contador c2;
-						for (c2 = 0; c2 < n_cartas; c2++){
-							if(cartas[c2].indice_seq == c1){
-								vazio = 1;
-							}
-						}
-						if(!vazio){
-							printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
-							break;
-						}
-					}
-					if(!vazio){
-						break;
-					}
-					for (c1 = 1; c1 <= n_grupos; c1++){
-						vazio = 0;
-						contador c2;
-						for (c2 = 0; c2 < n_cartas; c2++){
-							if(cartas[c2].indice_grupo == c1){
-								vazio = 1;
-							}
-						}
-						if(!vazio){
-							printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
-							break;
-						}
-					}
-					if(!vazio){
-						break;
-					}
-					cartas = Comprar_Carta(baralho, 0, cartas, n_cartas);
-					n_cartas++;
-					n_rodadas++;
-					invalido = 0;
-					break;
-				case '6':
-					for(c1 = 1; c1 <= n_seq; c1++){
-						vazio = 0;
-						contador c2;
-						for (c2 = 0; c2 < n_cartas; c2++){
-							if(cartas[c2].indice_seq == c1){
-								vazio = 1;
-							}
-						}
-						if(!vazio){
-							printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
-							break;
-						}
-					}
-					if(!vazio){
-						break;
-					}
-					for (c1 = 1; c1 <= n_grupos; c1++){
-						vazio = 0;
-						contador c2;
-						for (c2 = 0; c2 < n_cartas; c2++){
-							if(cartas[c2].indice_grupo == c1){
-								vazio = 1;
-							}
-						}
-						if(!vazio){
-							printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
-							break;
-						}
-					}
-					if(!vazio){
-						break;
-					}
-					if(!carta_mao_usada){
-						printf("Nao e possivel terminar seu turno sem colocar pelo menos uma carta de sua mao no tabuleiro.\nColoque uma carta no tabuleiro ou compre uma carta.\n\n");
-						break;
-					}
-					invalido = 0;
-					break;
-				}
-			}
-			break;
-		case 1:
-		default:;
-		}
+		Rodada(n_jogadores, n_rodadas, &carta_mao_usada, cartas, &n_grupos, &n_seq, &n_cartas, baralho);
+		n_rodadas++;
 	}
 
 	getc(stdin);
