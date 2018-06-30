@@ -21,6 +21,10 @@
 
 /* Declaração de funções */
 
+void Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
+
+}
+
 void Mover_em_grupo(carta_j *cartas, int indice_carta, int n_grupos, int n_cartas){
 	opc opc_mov;
 	printf("Em qual grupo deseja colocar a carta?\n");
@@ -252,7 +256,21 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 			break;
 			default:;
 		}
+		printf("Deseja mover mais cartas? (lembre-se de mover as cartas de forma que o tabuleiro seja valido)\n	1- Sim.\n	2- Não.");
+		opc opc_continuar;
+		opc _continuar = getc(stdin);
+		while((opc_continuar != '1') || (opc_continuar != '2')){
+			printf("Opcao invalida!\n");
+			printf("Deseja mover mais cartas? (lembre-se de mover as cartas de forma que o tabuleiro seja valido)\n	1- Sim.\n	2- Não.");
+			opc_continuar = getc(stdin);
+		}
+		if(opc_continuar == 2){
+			break;
+		}
 	}
+
+
+
 	free(cartas);
 }
 
