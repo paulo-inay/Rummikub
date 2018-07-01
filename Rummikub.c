@@ -28,7 +28,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 	int verif_valor;
 	int naipe_set = 0;
 	contador c1;
-	for(c1 = 1; c1 < n_seq; c1++){
+	for(c1 = 1; c1 <= n_seq; c1++){
 		contador c2;
 		for (c2 = 0; c2 < n_cartas; c2++){
 			if(cartas[c2].indice_seq == c1){
@@ -41,7 +41,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 		}
 		for (c2 = 0; c2 < n_cartas; c2++){
 			if(cartas[c2].indice_seq == c1){
-				if(naipe_set == 0){
+				if((naipe_set == 0) && (cartas[c2].conteudo[1] != '*')){
 					verif_naipe = cartas[c2].conteudo[1];
 					naipe_set = 1;
 				} else {
@@ -52,35 +52,34 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 				}
 			}
 		}
+		int flag = 0;
 		for (c2 = 1; c2 <= max_pos; c2++){
 			contador c3;
-			int flag = 0;
 			for (c3 = 0; c3 < n_cartas; c3++){
 				if(cartas[c3].indice_seq == c1){
 					if(cartas[c3].pos_seq == c2){
 						if(!flag){
 							if(cartas[c3].conteudo[0] != '*'){
-								if((cartas[c3].conteudo[0]<= '9') && (cartas[c3].conteudo[0] >= '1')){
-									verif_valor = cartas[c3].conteudo[0] - 48;
+								if((cartas[c3].conteudo[0] <= '9') && (cartas[c3].conteudo[0] >= '1')){
+									verif_valor = cartas[c3].conteudo[0];
 									flag = 1;
 								} else {
-									verif_valor = cartas[c3].conteudo[0] - 64;
-									verif_valor += 9;
+									verif_valor = cartas[c3].conteudo[0] - 16;
 									flag = 1;
 								}
 							}
 						} else {
-							if((cartas[c3].conteudo[0]<= '9') && (cartas[c3].conteudo[0] >= '1')){
-								if((cartas[c3].conteudo[0] - 48 - verif_valor) == 1){
-									verif_valor = cartas[c3].conteudo[0] - 48;
+							if((cartas[c3].conteudo[0] <= '9') && (cartas[c3].conteudo[0] >= '1')){
+								if((cartas[c3].conteudo[0] - verif_valor) == 1){
+									verif_valor = cartas[c3].conteudo[0];
 								} else {
 									printf("Movimento invalido! Todas as cartas de uma sequencia devem estar ordenadas!\n\n");
 									return 0;
 								}
 							} else if (cartas[c3].conteudo[0] == '*'){
 								verif_valor++;
-							} else if ((cartas[c3].conteudo[0] - 64 + 9 - verif_valor) == 1){
-								verif_valor = (cartas[c3].conteudo[0] - 64 + 9);
+							} else if (((cartas[c3].conteudo[0] - 16) - verif_valor) == 1){
+								verif_valor = (cartas[c3].conteudo[0] - 16);
 							} else {
 								printf("Movimento invalido! Todas as cartas de uma sequencia devem estar ordenadas!\n\n");
 								return 0;
@@ -98,7 +97,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 	int naipe_set2 = 0;
 	int naipe_set3 = 0;
 	int valor_set = 0;
-	for(c1 = 1; c1 < n_grupos; c1++){
+	for(c1 = 1; c1 <= n_grupos; c1++){
 		int quant = 0;
 		contador c2;
 		for(c2 = 0; c2 < n_cartas; c2++){
@@ -106,7 +105,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 				quant++;
 			}
 		}
-		if((quant != 0) || ((quant > 4) || (quant < 3))){
+		if((quant != 0) && ((quant != 4) && (quant != 3))){
 			printf("Movimento invalido! Todos os grupos devem ter 3 ou 4 cartas!\n\n");
 			return 0;
 		}
@@ -148,6 +147,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 				} else {
 					if((cartas[c2].conteudo[0] != verif_valor) && (cartas[c2].conteudo[0] != '*')){
 						printf("Movimento invalido! Todas as cartas de um grupo devem ter o mesmo valor!\n\n");
+						return 0;
 					}
 				}
 			}
@@ -261,10 +261,9 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 		int indice_carta;
 		char carta_cmp[3];
 
-		while((opc_mov > '3') || (opc_mov < '1')){
+		while((opc_mov > '3') && (opc_mov < '1')){
 			printf("Opcao invalida!\n");
 			printf("A carta que deseja mover esta em:\n	1- Sua mao.\n	2- Uma sequencia.\n	3- Um grupo.\n");
-			opc opc_mov;
 			opc_mov = getc(stdin);
 			fflush(stdin);
 		}
@@ -312,7 +311,6 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 					break;
 				}
 				Mover_em_grupo(cartas, indice_carta, n_grupos, n_cartas);
-				printf("test");
 				*carta_mao_usada = 1;
 			}
 			break;
