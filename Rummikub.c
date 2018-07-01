@@ -205,12 +205,12 @@ void Mover_em_seq(carta_j *cartas, int indice_carta, int n_seq, int n_cartas){
 		cartas[indice_carta].indice_grupo = 0;
 		printf("Carta adicionada com sucesso!\n\n");
 	} else {
-		printf("Em qual posição deseja adicionar a carta?\n");
+		printf("Em qual posicao deseja adicionar a carta?\n");
 		opc_mov = getc(stdin);
 		fflush(stdin);
 		if((opc_mov > (max_pos + 49)) || (opc_mov < '1')){ // max_pos + 49 = max_pos + '1'
 			printf("Posicao invalida! Leve em consideracao quantas cartas ja estao na sequencia.\n");
-			printf("Em qual posição deseja adicionar a carta?\n");
+			printf("Em qual posicao deseja adicionar a carta?\n");
 			opc_mov = getc(stdin);
 			fflush(stdin);
 		} else {
@@ -461,7 +461,6 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 }
 
 carta_j* Comprar_Carta(char *baralho, int indice_jogador, carta_j *cartas, int n_cartas){
-	printf("%d\n", n_cartas);
 	if(n_cartas == 0){
 		cartas = (carta_j *) malloc(sizeof(carta_j));
 		if(!cartas){
@@ -624,6 +623,51 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 	printf("E sua vez Jogador %d! ", (n_rodadas % n_jogadores) + 1);
 	int invalido = 1;
 	while (invalido){
+		printf("\n");
+		for(c1 = 1; c1 <= n_jogadores; c1++){
+			printf("Cartas do jogador %d:", c1);
+			contador c2;
+			for (c2 = 0; c2 < *n_cartas; c2++){
+				if(cartas[c2].indice_mao == c1 - 1){
+					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
+				}
+			}
+			printf("\n");
+		}
+		printf("\nTabuleiro:\n");
+		for(c1 = 1; c1 <= *n_grupos; c1++){
+			printf("	Grupo %d:", c1);
+			contador c2;
+			for (c2 = 0; c2 < *n_cartas; c2++){
+				if(cartas[c2].indice_grupo == c1){
+					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
+				}
+			}
+			printf("\n");
+		}
+		for(c1 = 1; c1 <= *n_seq; c1++){
+			printf("	Sequencia %d:", c1);
+			contador c2;
+			int total = 0;
+			for (c2 = 0; c2 < *n_cartas; c2++){
+				if(cartas[c2].indice_seq == c1){
+					total++;
+				}
+			}
+			for (c2 = 1; c2 <= total; c2++){
+				contador c3;
+				for (c3 = 0; c3 < *n_cartas; c3++){
+					if(cartas[c3].indice_seq == c1){
+						if(cartas[c3].pos_seq == c2){
+							printf(" %c%c", cartas[c3].conteudo[0], cartas[c3].conteudo[1]);
+						}
+					}
+				}
+			}
+			printf("\n");
+		}
+		printf("\n");
+
 		printf("Escolha uma das opcoes a seguir:\n	1- Adicionar grupo.\n	2- Adicionar sequencia.\n	3- Mover ou adicionar cartas no tabuleiro.\n	4- Remover ultima sequencia ou grupo (obs: ele(a) deve estar vazio(a)).\n	5- Comprar uma carta e passar a vez.\n	6- Terminar seu turno (obs: uma carta de sua mao deve ser colocada no tabuleiro)\n");
 		opc_jogo = getc(stdin);
 		fflush(stdin);
@@ -847,39 +891,6 @@ int main(){
 	n_rodadas = 0;
 
 	while((!vitoria) && (n_cartas != 106)){
-		printf("\n");
-		for(c1 = 1; c1 <= n_jogadores; c1++){
-			printf("Cartas do jogador %d:", c1);
-			contador c2;
-			for (c2 = 0; c2 <= n_cartas; c2++){
-				if(cartas[c2].indice_mao == c1 - 1){
-					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
-				}
-			}
-			printf("\n");
-		}
-		printf("\nTabuleiro:\n");
-		for(c1 = 1; c1 <= n_grupos; c1++){
-			printf("	Grupo %d:", c1);
-			contador c2;
-			for (c2 = 0; c2 <= n_cartas; c2++){
-				if(cartas[c2].indice_grupo == c1){
-					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
-				}
-			}
-			printf("\n");
-		}
-		for(c1 = 1; c1 <= n_seq; c1++){
-			printf("	Sequencia %d:", c1);
-			contador c2;
-			for (c2 = 0; c2 <= n_cartas; c2++){
-				if(cartas[c2].indice_seq == (c1 + 1)){
-					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
-				}
-			}
-			printf("\n");
-		}
-		printf("\n");
 		cartas = Rodada(n_jogadores, n_rodadas, &carta_mao_usada, cartas, &n_grupos, &n_seq, &n_cartas, baralho);
 
 		n_rodadas++;
