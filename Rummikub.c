@@ -28,7 +28,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
-/* Declaração das funçÃµes */
+/* Declaração das funções */
 
 
 /*Função Verificar_Tabuleiro: Verifica se o tabuleiro é válido após o movimento de um jogador.
@@ -1079,7 +1079,7 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 
 int main(){
 	
-/* Declaração das variáveis do main e alocaçÃµes */
+/* Declaração das variáveis do main e alocações */
 	
 	int start = 0; //Variável de controle do loop de repitição do jogo.
 	
