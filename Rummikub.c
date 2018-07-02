@@ -62,7 +62,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 		}
 		
 		if((max_pos > 0) && (max_pos < 3)){
-			printf("Movimento invalido! Todas as sequencias devem ter 3 cartas ou mais!\n\n");
+			printf("\n\t\t\t\t\t     Movimento invalido... As sequencias devem ter no minimo 3 cartas!!!");
 			return 0;
 		}
 		
@@ -78,7 +78,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 				} else {
 					if(cartas[c2].conteudo[1] != verif_naipe){
 						if(cartas[c2].conteudo[1] != '*'){
-							printf("Movimento invalido! Todas as cartas de uma sequencia devem ter o mesmo naipe!\n\n");
+							printf("\n\t\t\t\t\t     Movimento invalido... As cartas de uma sequencia devem ter o mesmo naipe!!!");
 							printf("%c%c\n", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
 							return 0;
 						}
@@ -109,7 +109,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 								if((cartas[c3].conteudo[0] - verif_valor) == 1){
 									verif_valor = cartas[c3].conteudo[0];
 								} else {
-									printf("Movimento invalido! Todas as cartas de uma sequencia devem estar ordenadas!\n\n");
+									printf("\n\t\t\t\t\t     Movimento invalido... As cartas de uma sequencia devem estar ordenadas!!!");
 									return 0;
 								}
 							} else if (cartas[c3].conteudo[0] == '*'){
@@ -117,7 +117,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 							} else if (((cartas[c3].conteudo[0] - 7) - verif_valor) == 1){
 								verif_valor = (cartas[c3].conteudo[0] - 7);
 							} else {
-								printf("Movimento invalido! Todas as cartas de uma sequencia devem estar ordenadas!\n\n");
+								printf("\n\t\t\t\t\t     Movimento invalido... As cartas de uma sequencia devem estar ordenadas!!!");
 								return 0;
 							}
 						}
@@ -149,7 +149,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 		}
 		
 		if((quant != 0) && ((quant != 4) && (quant != 3))){
-			printf("Movimento invalido! Todos os grupos devem ter 3 ou 4 cartas!\n\n");
+			printf("\n\t\t\t\t\t     Movimento invalido... Os grupos devem ter 3 ou 4 cartas!!!");
 			return 0;
 		}
 		
@@ -162,23 +162,23 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 					}
 				} else if(!naipe_set2){
 					if((cartas[c2].conteudo[1] == verif_naipe) && (cartas[c2].conteudo[1] != '*')){
-						printf("Movimento invalido! Todas as cartas de um grupo devem ter naipes diferentes!\n\n");
+						printf("\n\t\t\t\t\t     Movimento invalido... As cartas de um grupo devem ter naipes diferentes!!!");
 						return 0;
 					}
 					verif_naipe2 = cartas[c2].conteudo[1];
 					naipe_set2 = 1;
 				} else if(!naipe_set3){
 					if(((cartas[c2].conteudo[1] == verif_naipe) || (cartas[c2].conteudo[1] == verif_naipe2)) && (cartas[c2].conteudo[1] != '*')){
-						printf("Movimento invalido! Todas as cartas de um grupo devem ter naipes diferentes!\n\n");
+						printf("\n\t\t\t\t\t     Movimento invalido... As cartas de um grupo devem ter naipes diferentes!!!");
 						return 0;
 					}
 					verif_naipe3 = cartas[c2].conteudo[1];
 					naipe_set3 = 1;
 				} else if(((cartas[c2].conteudo[1] == verif_naipe) || (cartas[c2].conteudo[1] == verif_naipe2)) && (cartas[c2].conteudo[1] != '*')){
-					printf("Movimento invalido! Todas as cartas de um grupo devem ter naipes diferentes!\n\n");
+					printf("\n\t\t\t\t\t     Movimento invalido... As cartas de um grupo devem ter naipes diferentes!!!");
 					return 0;
 				} else if((cartas[c2].conteudo[1] == verif_naipe3) && (cartas[c2].conteudo[1] != '*')){
-					printf("Movimento invalido! Todas as cartas de um grupo devem ter naipes diferentes!\n\n");
+					printf("\n\t\t\t\t\t     Movimento invalido... As cartas de um grupo devem ter naipes diferentes!!!");
 					return 0;
 				}
 			}
@@ -193,7 +193,7 @@ int Verificar_Tabuleiro(carta_j *cartas, int n_grupos, int n_seq, int n_cartas){
 					valor_set = 1;
 				} else {
 					if((cartas[c2].conteudo[0] != verif_valor) && (cartas[c2].conteudo[0] != '*')){
-						printf("Movimento invalido! Todas as cartas de um grupo devem ter o mesmo valor!\n\n");
+						printf("\n\t\t\t\t\t     Movimento invalido... Todas as cartas de um grupo devem ter o mesmo valor!!!");
 						return 0;
 					}
 				}
@@ -220,15 +220,14 @@ void Mover_em_grupo(carta_j *cartas, int indice_carta, int n_grupos, int n_carta
 	
 	opc opc_mov;
 	
-	printf("Em qual grupo deseja colocar a carta?\n");
+	printf("\n\t\t\t\t\t     Em qual grupo deseja colocar a carta?\n\n\t\t\t\t\t           --> ");
 	opc_mov = getc(stdin);
 	fflush(stdin);
 	int ind_grupo;
 	ind_grupo = (int) opc_mov - 48;
 	
 	while((ind_grupo > n_grupos) || (ind_grupo <= 0)){
-		printf("Entrada invalida.\n");
-		printf("Em qual grupo deseja colocar a carta?\n");
+		printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 		opc_mov = getc(stdin);
 		fflush(stdin);
 		ind_grupo = (int) opc_mov - 48;
@@ -238,7 +237,7 @@ void Mover_em_grupo(carta_j *cartas, int indice_carta, int n_grupos, int n_carta
 	cartas[indice_carta].indice_seq = 0;
 	cartas[indice_carta].pos_seq = 0;
 	cartas[indice_carta].indice_mao = -1;
-	printf("Carta adicionada com sucesso!\n\n");
+	printf("\n\t\t\t\t\t     Carta adicionada com sucesso!!!");
 }
 
 
@@ -256,15 +255,14 @@ void Mover_em_seq(carta_j *cartas, int indice_carta, int n_seq, int n_cartas){
 	
 	opc opc_mov;
 	
-	printf("Em qual sequencia deseja colocar a carta?\n");
+	printf("\n\t\t\t\t\t     Em qual sequencia deseja colocar a carta?\n\n\t\t\t\t\t           --> ");
 	opc_mov = getc(stdin);
 	fflush(stdin);
 	int ind_seq;
 	ind_seq = (int) opc_mov - 48;
 	
 	while((ind_seq > n_seq) || (ind_seq <= 0)){
-		printf("Entrada invalida.\n");
-		printf("Em qual sequencia deseja colocar a carta?\n");
+		printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 		opc_mov = getc(stdin);
 		fflush(stdin);
 		ind_seq = (int) opc_mov - 48;
@@ -284,14 +282,14 @@ void Mover_em_seq(carta_j *cartas, int indice_carta, int n_seq, int n_cartas){
 		cartas[indice_carta].pos_seq = 1;
 		cartas[indice_carta].indice_mao = -1;
 		cartas[indice_carta].indice_grupo = 0;
-		printf("Carta adicionada com sucesso!\n\n");
+		printf("\n\t\t\t\t\t     Carta adicionada com sucesso!!!");
 	} else {
-		printf("Em qual posicao deseja adicionar a carta?\n");
+		printf("\n\t\t\t\t\t     Em qual posicao deseja adicionar a carta?\n\n\t\t\t\t\t           --> ");
 		opc_mov = getc(stdin);
 		fflush(stdin);
 		if((opc_mov > (max_pos + 49)) || (opc_mov < '1')){ // max_pos + 49 = max_pos + '1'
-			printf("Posicao invalida! Leve em consideracao quantas cartas ja estao na sequencia.\n");
-			printf("Em qual posicao deseja adicionar a carta?\n");
+			printf("\n\t\t\t\t\t     Posicao invalida... Leve em consideracao quantas cartas ja estao na sequencia.");
+			printf("\n\n\t\t\t\t\t     Tente novamente --> ");
 			opc_mov = getc(stdin);
 			fflush(stdin);
 		} else {
@@ -306,7 +304,7 @@ void Mover_em_seq(carta_j *cartas, int indice_carta, int n_seq, int n_cartas){
 			cartas[indice_carta].pos_seq = (opc_mov - 48);
 			cartas[indice_carta].indice_mao = -1;
 			cartas[indice_carta].indice_grupo = 0;
-			printf("Carta adicionada com sucesso!\n\n");
+			printf("\n\t\t\t\t\t     Carta adicionada com sucesso!!!");
 		}
 	}
 }
@@ -329,14 +327,14 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 	int valido = 1;
 
 	if((!n_seq) && (!n_grupos)){
-		printf("Nao ha como mover cartas se nao ha grupos ou sequencias no tabuleiro!!\n\n");
+		printf("\n\t\t\t\t\t     Impossivel mover cartas... Nao ha grupos ou sequencias no tabuleiro!!!");
 		valido = 0;
 	}
 
 	carta_j *cartas;
 	cartas = (carta_j *) malloc(n_cartas * sizeof(carta_j));
 	if(!cartas){
-		printf("Erro na alocacao dinamica de memoria!\n");
+		printf("\n\t\t\t\t\t     Erro na alocacao dinamica de memoria!!!");
 		getc(stdin);
 		exit(1);
 	}
@@ -348,7 +346,7 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 
 	while(valido){
 		
-		printf("A carta que deseja mover esta em:\n	1- Sua mao.\n	2- Uma sequencia.\n	3- Um grupo.\n");
+		printf("\n\t\t\t\t\t     Selecionar carta\n\n\t\t\t\t\t     1 - Mao\n\t\t\t\t\t     2 - Sequencia\n\t\t\t\t\t     3 - Grupo\n\n\t\t\t\t\t           --> ");
 		opc opc_mov;
 		opc_mov = getc(stdin);
 		fflush(stdin);
@@ -357,8 +355,7 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 		char carta_cmp[3];
 
 		while((opc_mov > '3') && (opc_mov < '1')){
-			printf("Opcao invalida!\n");
-			printf("A carta que deseja mover esta em:\n	1- Sua mao.\n	2- Uma sequencia.\n	3- Um grupo.\n");
+			printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 			opc_mov = getc(stdin);
 			fflush(stdin);
 		}
@@ -368,7 +365,7 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 		switch(opc_mov){
 			
 			case '1':
-				printf("Digite o conteudo da carta (numero e naipe):\n");
+				printf("\n\t\t\t\t\t     Insira a carta (numero e naipe) --> ");
 				fgets(carta_cmp, 3, stdin);
 				fflush(stdin);
 				for(c1 = 0; c1 < n_cartas; c1++){
@@ -383,28 +380,27 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 					}
 				}
 				if (!carta_existe){
-					printf("A carta nao foi encontrada!\n");
+					printf("\n\t\t\t\t\t     A carta nao foi encontrada!!!");
 					break;
 				}
-				printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+				printf("\n\t\t\t\t\t     Posicionar carta\n\n\t\t\t\t\t     1 - Sequencia\n\t\t\t\t\t     2- Grupo\n\n\t\t\t\t\t           --> ");
 				opc_mov = getc(stdin);
 				fflush(stdin);
 				while((opc_mov != '1') && (opc_mov != '2')){
-					printf("Opcao invalida!\n");
-					printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+					printf("\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 					opc_mov = getc(stdin);
 					fflush(stdin);
 				}
 				if(opc_mov == '1'){
 					if(!n_seq){
-						printf("Nao ha sequencias no tabuleiro!!\n\n");
+						printf("\n\t\t\t\t\t     Nao ha sequencias no tabuleiro!!!");
 						break;
 					}
 					Mover_em_seq(cartas, indice_carta, n_seq, n_cartas);
 					*carta_mao_usada = 1;
 				} else {
 					if(!n_grupos){
-						printf("Nao ha grupos no tabuleiro!!\n\n");
+						printf("\n\t\t\t\t\t     Nao ha grupos no tabuleiro!!!");
 						break;
 					}
 					Mover_em_grupo(cartas, indice_carta, n_grupos, n_cartas);
@@ -414,21 +410,20 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 			
 			case '2':;
 				if(!n_seq){
-					printf("Nao ha sequencias no tabuleiro!!\n\n");
+					printf("\n\t\t\t\t\t     Nao ha sequencias no tabuleiro!!!");
 					break;
 				}
 				int add_seq;
 				int pos_add_seq;
-				printf("Insira a sequencia aonde a carta esta no momento:\n");
+				printf("\n\t\t\t\t\t     Insira a sequencia na qual a carta se encontra --> ");
 				add_seq = getc(stdin) - 48;
 				fflush(stdin);
 				while((add_seq > n_seq) || (add_seq <= 0)){
-					printf("Entrada invalida!\n");
-					printf("Insira a sequencia aonde a carta esta no momento:\n");
+					printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 					add_seq = getc(stdin) - 48;
 					fflush(stdin);
 				}
-				printf("Insira a posicao na sequencia que a carta ocupa no momento:\n");
+				printf("\n\t\t\t\t\t     Insira a posicao que a carta ocupa --> ");
 				pos_add_seq = getc(stdin) - 48;
 				fflush(stdin);
 				int max_pos = 0;
@@ -438,8 +433,7 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 					}
 				}
 				while((pos_add_seq > max_pos) || (pos_add_seq <= 0)){
-					printf("Entrada invalida!\n");
-					printf("Insira a posicao na sequencia que a carta ocupa no momento:\n");
+					printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 					pos_add_seq = getc(stdin) - 48;
 					fflush(stdin);
 				}
@@ -453,15 +447,14 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 					}
 				}
 				if (!carta_existe){
-					printf("A carta nao foi encontrada!\n");
+					printf("\n\t\t\t\t\t     A carta nao foi encontrada!!!");
 					break;
 				}
-				printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+				printf("\n\t\t\t\t\t     Posicionar carta\n\n\t\t\t\t\t     1 - Sequencia\n\t\t\t\t\t     2- Grupo\n\n\t\t\t\t\t           --> ");
 				opc_mov = getc(stdin);
 				fflush(stdin);
 				while((opc_mov != '1') && (opc_mov != '2')){
-					printf("Opcao invalida!\n");
-					printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+					printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 					opc_mov = getc(stdin);
 					fflush(stdin);
 				}
@@ -469,7 +462,7 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 					Mover_em_seq(cartas, indice_carta, n_seq, n_cartas);
 				} else {
 					if(!n_grupos){
-						printf("Nao ha grupos no tabuleiro!!\n\n");
+						printf("\n\t\t\t\t\t     Nao ha grupos no tabuleiro!!!");
 						break;
 					}
 					Mover_em_grupo(cartas, indice_carta, n_grupos, n_cartas);
@@ -478,20 +471,19 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 			
 			case '3':;
 				if(!n_grupos){
-					printf("Nao ha grupos no tabuleiro!!\n\n");
+					printf("\n\t\t\t\t\t     Nao ha grupos no tabuleiro!!!");
 					break;
 				}
 				int add_grupo;
-				printf("Insira o grupo aonde a carta esta no momento:\n");
+				printf("\n\t\t\t\t\t     Insira o grupo no qual a carta se encontra --> ");
 				add_grupo = getc(stdin) - 48;
 				fflush(stdin);
 				while((add_grupo > n_grupos) || (add_grupo <= 0)){
-					printf("Entrada invalida!\n");
-					printf("Insira o grupo aonde a carta esta no momento:\n");
+					printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 					add_grupo = getc(stdin) - 48;
 					fflush(stdin);
 				}
-				printf("Digite o conteudo da carta (numero e naipe):\n");
+				printf("\n\t\t\t\t\t     Insira a carta (numero e naipe) --> ");
 				fgets(carta_cmp, 3, stdin);
 				fflush(stdin);
 				contador c1;
@@ -507,21 +499,20 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 					}
 				}
 				if (!carta_existe){
-					printf("A carta nao foi encontrada!\n");
+					printf("\n\t\t\t\t\t     A carta nao foi encontrada!!!");
 					break;
 				}
-				printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+				printf("\n\t\t\t\t\t     Posicionar carta\n\n\t\t\t\t\t     1 - Sequencia\n\t\t\t\t\t     2- Grupo\n\n\t\t\t\t\t           --> ");
 				opc_mov = getc(stdin);
 				fflush(stdin);
 				while((opc_mov != '1') && (opc_mov != '2')){
-					printf("Opcao invalida!\n");
-					printf("Aonde deseja colocar a carta?\n	1- Uma sequencia.\n	2- Um grupo.\n");
+					printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 					opc_mov = getc(stdin);
 					fflush(stdin);
 				}
 				if(opc_mov == '1'){
 					if(!n_seq){
-						printf("Nao ha sequencias no tabuleiro!!\n\n");
+						printf("\n\n\t\t\t\t\t     Nao ha sequencias no tabuleiro!!!");
 						break;
 					}
 					Mover_em_seq(cartas, indice_carta, n_seq, n_cartas);
@@ -533,14 +524,13 @@ void Mover_Cartas(carta_j *cartas_orig, int n_cartas, int indice_jogador, int n_
 			default:;
 		}
 		
-		printf("Deseja mover mais cartas? (lembre-se de mover as cartas de forma que o tabuleiro seja valido)\n	1- Sim.\n	2- Nao.\n");
+		printf("\n\t\t\t\t\t     Deseja mover mais cartas?\n\n\t\t\t\t\t     1 - Sim\n\t\t\t\t\t     2 - Nao\n\n\t\t\t\t\t           --> ");
 		opc opc_continuar;
 		opc_continuar = getc(stdin);
 		fflush(stdin);
 		
 		while((opc_continuar != '1') && (opc_continuar != '2')){
-			printf("Opcao invalida!\n");
-			printf("Deseja mover mais cartas? (lembre-se de mover as cartas de forma que o tabuleiro seja valido)\n	1- Sim.\n	2- Nao.");
+			printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 			opc_continuar = getc(stdin);
 			fflush(stdin);
 		}
@@ -577,14 +567,14 @@ carta_j* Comprar_Carta(char *baralho, int indice_jogador, carta_j *cartas, int n
 	if(n_cartas == 0){
 		cartas = (carta_j *) malloc(sizeof(carta_j));
 		if(!cartas){
-			printf("Erro na alocacao dinamica de memoria!\n");
+			printf("\n\t\t\t\t\t     Erro na alocacao dinamica de memoria!!!");
 			getc(stdin);
 			exit(1);
 		}
 	} else {
 		cartas = (carta_j *) realloc(cartas, (n_cartas + 1) * (sizeof(carta_j)));
 		if(!cartas){
-			printf("Erro na alocacao dinamica de memoria!\n");
+			printf("\n\t\t\t\t\t     Erro na alocacao dinamica de memoria!!!");
 			getc(stdin);
 			exit(1);
 		}
@@ -688,7 +678,7 @@ void Baralho_Aleatorio(char *baralho, char *carta){
 int Ler_Baralho(FILE *f_read, char *baralho){
 	
 	contador c1;
-	printf("Insira o nome do arquivo (limite de 30 caracteres):\n");
+	printf("\n\t\t\t\t\t     Insira o nome do arquivo (limite de 30 caracteres):\n");
 	char nome_arquivo[31];
 	fgets(nome_arquivo,30,stdin);
 	fflush(stdin);
@@ -700,7 +690,7 @@ int Ler_Baralho(FILE *f_read, char *baralho){
 
 	f_read = fopen(nome_arquivo,"r");
 	if (!f_read){
-		printf("Erro na abertura do arquivo!\n");
+		printf("\n\t\t\t\t\t     Erro na abertura do arquivo!!!");
 		getc(stdin);
 		exit(1);
 	}
@@ -746,7 +736,7 @@ int Ler_Baralho(FILE *f_read, char *baralho){
 	} while ((leitura != EOF) && (c1 != 212));
 
 	if(c1 < 212){
-		printf("Nao ha cartas o suficiente no arquivo ou ele esta mal formatado.\nEscolha utilizar outro arquivo ou um baralho aleatorio.\n\n");
+		printf("\n\t\t\t\t\t     Nao ha cartas o suficiente no arquivo ou ele esta mal formatado.\n\t\t\t\t\t     Utilize outro arquivo ou um baralho aleatorio.\n\n");
 		fclose(f_read);
 		return 1; // A funÃ§Ã£o retorna um valor para a flag invalido, entÃ£o 1 significa que o loop continuarÃ¡.
 	}
@@ -773,45 +763,39 @@ int Ler_Baralho(FILE *f_read, char *baralho){
 
 carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *cartas, int *n_grupos, int *n_seq, int *n_cartas, char *baralho, int *v){
 	
+	
 	int vazio = 0;
 	contador c1;
 	opc opc_jogo;
 	carta_mao_usada = 0;
 	int *usada;
 	usada = (int *) &carta_mao_usada;
-	printf("E sua vez Jogador %d! ", (n_rodadas % n_jogadores) + 1);
 	int invalido = 1;
 	
 	while (invalido){
 		
-		printf("\n");
+		system("cls");
 		
-		for(c1 = 1; c1 <= n_jogadores; c1++){
-			printf("Cartas do jogador %d:", c1);
-			contador c2;
-			for (c2 = 0; c2 < *n_cartas; c2++){
-				if(cartas[c2].indice_mao == c1 - 1){
-					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
-				}
-			}
-			printf("\n");
-		}
 		
-		printf("\nTabuleiro:\n");
+		printf("\n\t\t\t\t\t     Tabuleiro");
+		printf("\n\t\t\t\t\t                   __________________________\n");
 		
 		for(c1 = 1; c1 <= *n_grupos; c1++){
-			printf("	Grupo %d:", c1);
+			printf("\n\t\t\t\t\t         Grupo %d   ", c1);
 			contador c2;
 			for (c2 = 0; c2 < *n_cartas; c2++){
 				if(cartas[c2].indice_grupo == c1){
 					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
 				}
 			}
-			printf("\n");
 		}
 		
+		printf("\n\t\t\t\t\t                   __________________________");
+		
+		printf("\n\t\t\t\t\t                   __________________________\n");
+		
 		for(c1 = 1; c1 <= *n_seq; c1++){
-			printf("	Sequencia %d:", c1);
+			printf("\n\t\t\t\t\t     Sequencia %d   ", c1);
 			contador c2;
 			int total = 0;
 			for (c2 = 0; c2 < *n_cartas; c2++){
@@ -829,12 +813,24 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 					}
 				}
 			}
-			printf("\n");
 		}
 		
-		printf("\n");
+		printf("\n\t\t\t\t\t                   __________________________\n");
+		
+		for(c1 = 1; c1 <= n_jogadores; c1++){
+			printf("\n\n\t\t\t     Cartas do jogador %d:", c1);
+			contador c2;
+			for (c2 = 0; c2 < *n_cartas; c2++){
+				if(cartas[c2].indice_mao == c1 - 1){
+					printf(" %c%c", cartas[c2].conteudo[0], cartas[c2].conteudo[1]);
+				}
+			}
+			printf("\n");
+		}
 
-		printf("Escolha uma das opcoes a seguir:\n	1- Adicionar grupo.\n	2- Adicionar sequencia.\n	3- Mover ou adicionar cartas no tabuleiro.\n	4- Remover ultima sequencia ou grupo (obs: ele(a) deve estar vazio(a)).\n	5- Comprar uma carta e passar a vez.\n	6- Terminar seu turno (obs: uma carta de sua mao deve ser colocada no tabuleiro)\n");
+		printf("\n\n\t\t\t\t\t     >> Eh sua vez, Jogador %d <<", (n_rodadas % n_jogadores) + 1);
+
+		printf("\n\n\n\t\t\t\t\t     Menu de opcoes\n\n\t\t\t\t\t     1 - Criar novo grupo\n\t\t\t\t\t     2 - Criar nova sequencia\n\t\t\t\t\t     3 - Manipular cartas\n\t\t\t\t\t     4 - Remover ultima sequencia ou grupo\n\t\t\t\t\t     5 - Comprar uma carta e passar a vez\n\t\t\t\t\t     6 - Terminar seu turno\n\n\t\t\t\t\t           --> ");
 		opc_jogo = getc(stdin);
 		fflush(stdin);
 		
@@ -855,20 +851,19 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 				break;
 			
 			case '4':
-				printf("Remover:\n	1- Sequencia.\n	2- Grupo.\n");
+				printf("\n\n\t\t\t\t\t     Remover\n\n\t\t\t\t\t     1 - Sequencia\n\t\t\t\t\t     2 - Grupo\n\n\t\t\t\t\t           --> ");
 				opc_jogo = getc(stdin);
 				fflush(stdin);
 				
 				while((opc_jogo > '2') || (opc_jogo < '1')){
-					printf("Valor invalido!\n\n");
-					printf("Remover:\n	1- Sequencia.\n	2- Grupo.\n");
+					printf("\n\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 					opc_jogo = getc(stdin);
 					fflush(stdin);
 				}
 				
 				if(opc_jogo == '1'){
 					if(!(*n_seq)){
-						printf("Nao ha sequencias no tabuleiro.\n\n");
+						printf("\n\n\t\t\t\t\t     Nao ha sequencias no tabuleiro.");
 						break;
 					}
 					int flag1 = 0;
@@ -878,18 +873,18 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 						}
 					}
 					if(flag1){
-						printf("Ainda ha cartas nessa sequencia! Remova elas antes de deleta-la.\n\n");
+						printf("\n\n\t\t\t\t\t     Ainda ha cartas nessa sequencia! Remova elas antes de deleta-la.");
 						break;
 					} else {
 						(*n_seq)--;
-						printf("Sequencia removida.\n\n");
+						printf("\n\n\t\t\t\t\t     Sequencia removida.");
 						break;
 					}
 				}
 				
 				if(opc_jogo == '2'){
 					if(!(*n_grupos)){
-						printf("Nao ha grupos no tabuleiro.\n\n");
+						printf("\n\n\t\t\t\t\t     Nao ha grupos no tabuleiro.");
 						break;
 					}
 					int flag1 = 0;
@@ -899,11 +894,11 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 						}
 					}
 					if(flag1){
-						printf("Ainda ha cartas nesse grupo! Remova elas antes de deleta-lo.\n\n");
+						printf("\n\n\t\t\t\t\t     Ainda ha cartas nesse grupo! Remova elas antes de deleta-lo.");
 						break;
 					} else {
 						(*n_grupos)--;
-						printf("Grupo removido.\n\n");
+						printf("\n\n\t\t\t\t\t     Grupo removido.");
 						break;
 					}
 				}
@@ -911,7 +906,7 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 			
 			case '5':
 				if(carta_mao_usada){
-					printf("Voce utilizou uma carta de sua mao, termine o turno normalmente em vez de comprar uma carta.\n\n");
+					printf("\n\n\t\t\t\t\t     Você já movimentou alguma carta!!! Não é possível comprar uma nova carta...");
 					break;
 				}
 				
@@ -926,7 +921,7 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 						}
 					}
 					if(!vazio){
-						printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+						printf("\n\n\t\t\t\t\t     Nao deixe grupos ou sequencias vazias antes de terminar seu turno.");
 						break;
 					}
 				}
@@ -944,7 +939,7 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 						}
 					}
 					if(!vazio){
-						printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+						printf("\n\n\t\t\t\t\t     Nao deixe grupos ou sequencias vazias antes de terminar seu turno.");
 						break;
 					}
 				}
@@ -970,7 +965,7 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 						}
 					}
 					if(!vazio){
-						printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+						printf("\n\n\t\t\t\t\t     Nao deixe grupos ou sequencias vazias antes de terminar seu turno.");
 						break;
 					}
 				}
@@ -988,7 +983,7 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 						}
 					}
 					if(!vazio){
-						printf("Nao deixe grupos ou sequencias vazias antes de terminar seu turno.\n\n");
+						printf("\n\n\t\t\t\t\t     Nao deixe grupos ou sequencias vazias antes de terminar seu turno.");
 						break;
 					}
 				}
@@ -998,7 +993,7 @@ carta_j *Rodada(int n_jogadores, int n_rodadas, int *carta_mao_usada, carta_j *c
 				}
 				
 				if(!carta_mao_usada){
-					printf("Nao e possivel terminar seu turno sem colocar pelo menos uma carta de sua mao no tabuleiro.\nColoque uma carta no tabuleiro ou compre uma carta.\n\n");
+					printf("\n\n\t\t\t\t\t     Nao eh possivel terminar seu turno sem realizar algum movimento.\n\n\t\t\t\t\t     Coloque uma carta no tabuleiro ou compre uma.");
 					break;
 				}
 				
@@ -1027,7 +1022,7 @@ int main(){
 	
 /* DeclaraÃ§Ã£o das variÃ¡veis do main e alocaÃ§Ãµes */
 	
-	int start = 0;
+	int start = 0; //Variável de controle do loop de repitição do jogo.
 	
 	FILE *f_read = NULL;
 
@@ -1053,8 +1048,8 @@ int main(){
 	int carta_mao_usada = 0; //Indica se o jogador jÃ¡ colocou uma carta de sua mÃ£o no tabuleiro durante a rodada.
 	int vazio; //Flag que indica se o grupo ou sequÃªncia que estÃ¡ sendo avaliado estÃ¡ vazio.
 
-	int aux = 0;
-	int vit_sc[2] = {0, 9999};
+	int aux = 0; //Variável auxiliar para determinação de quem fez menos pontos, para o caso das peças de compra acabarem.
+	int vit_sc[2] = {0, 9999}; //Vetor que guarda na primeira posição o jogador com menos pontos, e na segunda, a quantidade de pontos.
 	
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	
@@ -1079,6 +1074,8 @@ int main(){
 		printf("\n\t\t\t\t\t     Comando invalido... Tente novamente\n\n\t\t\t\t\t           --> ");
 		scanf("%d", &start);
 	}
+	
+	fflush(stdin);
 	
 	while(start){
 		
@@ -1107,12 +1104,12 @@ int main(){
 		
 		invalido = 1;
 		while(invalido){
-			printf("\n\t\t\t\t\t     Numero de jogodores\n\n\t\t\t\t\t    1 Jogador (Solitaire)\n\t\t\t\t\t         2 Jogadores\n\t\t\t\t\t         3 Jogadores\n\t\t\t\t\t         4 Jogadores\n\t\t\t\t\t         5 Jogadores\n\n\t\t\t\t\t           --> ");
+			printf("\n\n\t\t\t\t\t     Numero de jogodores\n\n\t\t\t\t\t    1 Jogador (Solitaire)\n\t\t\t\t\t         2 Jogadores\n\t\t\t\t\t         3 Jogadores\n\t\t\t\t\t         4 Jogadores\n\t\t\t\t\t         5 Jogadores\n\n\t\t\t\t\t           --> ");
 			opc_jogadores = getc(stdin);
 			fflush(stdin);
 			n_jogadores = opc_jogadores - 48;
 			if((n_jogadores > 5) || (n_jogadores < 1)){
-				printf("\n\t\t\t\t\t     Comando invalido... Tente novamente\n\n\t\t\t\t\t           --> ");
+				printf("\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 			} else invalido = 0;
 		}
 		
@@ -1135,13 +1132,13 @@ int main(){
 		
 		if(vitoria){
 			n_rodadas--;
-			printf("Jogador %d venceu!!!", (n_rodadas % n_jogadores) + 1);
+			printf("\n\n\t\t\t\t\t    Jogador %d venceu!!!", (n_rodadas % n_jogadores) + 1);
 		}
 		
 		if(n_cartas == 106){
 			contador c2;
 			n_rodadas--;
-			printf("Acabaram as cartas... Fim de jogo! Ganha quem tiver menos pontos!!!");
+			printf("\n\n\t\t\t\t\t    Acabaram as cartas... Fim de jogo! Ganha quem tiver menos pontos!!!");
 			for(c1 = 0; c1 < n_jogadores; c1++){
 				aux = 0;
 				for(c2 = 0; c2 < 106; c2++){
@@ -1156,7 +1153,7 @@ int main(){
 					vit_sc[1] = aux;
 				}
 			}
-			printf("O vencedor foi %d!!!", vit_sc[0]);
+			printf("\n\n\t\t\t\t\t    O vencedor foi %d!!!", vit_sc[0]);
 		}
 		
 		
@@ -1166,11 +1163,11 @@ int main(){
 		
 		//Reiniciar o jogo
 			
-		printf("\n\t\t\t\t\t    Deseja jogar novamente?\n\n\t\t\t\t\t     Pressione 1 para Sim\n\t\t\t\t\t     Pressione 0 para Nao\n\n\t\t\t\t\t           --> ");
+		printf("\n\n\t\t\t\t\t    Deseja jogar novamente?\n\n\t\t\t\t\t     Pressione 1 para Sim\n\t\t\t\t\t     Pressione 0 para Nao\n\n\t\t\t\t\t           --> ");
 		scanf("%d", &start);
 		
 		while(start < 0 || start > 1){
-			printf("\n\t\t\t\t\t     Comando invalido... Tente novamente\n\n\t\t\t\t\t           --> ");
+			printf("\n\t\t\t\t\t     Comando invalido... Tente novamente --> ");
 			scanf("%d", &start);
 		}
 		
