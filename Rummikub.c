@@ -1,7 +1,6 @@
-//p =  --> Paulo Inay Cruz - N° USP 10388691
-//p =  --> João Marcos Della Torre Divino - N° USP 10377708
-//p =  --> Jonathan Ferreira de Mello - N° USP 10377754
-
+//p = 0 --> Paulo Inay Cruz - N° USP 10388691
+//p = 1 --> Jonathan Ferreira de Mello - N° USP 10377754
+//p = 2 --> João Marcos Della Torre Divino - N° USP 10377708
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -661,7 +660,7 @@ void Baralho_Aleatorio(char *baralho, char *carta){
 					carta[1] = '#';
 					break;
 				case 3:
-					carta[1] = '&';
+					carta[1] = '$';
 				}
 
 				// Ao ler a próxima parte, lembre-se que as cartas vão de 1 a 9 e A a D.
@@ -755,7 +754,7 @@ int Ler_Baralho(FILE *f_read, char *baralho){
 				baralho[c1] = leitura;
 				c1++;
 				break;
-			case '&':
+			case '$':
 				baralho[c1] = leitura;
 				c1++;
 				break;
