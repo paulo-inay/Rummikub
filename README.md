@@ -1,3 +1,1 @@
 # Rummikub
-
-jogo dos bons
